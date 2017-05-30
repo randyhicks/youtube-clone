@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import SearchBar from './components/search_bar.js';
 import YTSearch from 'youtube-api-search';
-
+import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail'
 const API_Key = 'AIzaSyCMUiUmkeW7Y01g-g5yuXC7njs0vrnOYVk';
 
-YTSearch({key: API_Key, term: 'surfboards'}, function(data){console.log(data)});
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      videos: []
+    }
+
+    YTSearch({key: API_Key, term: 'surfboards'}, (videos) => {
+      this.setState({ videos });
+    });
+  }
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
         <SearchBar />
+        <VideoDetail video={this.state.videos[0]}/>
+        <VideoList videos={this.state.videos}/>
       </div>
     );
   }
